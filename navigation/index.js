@@ -9,6 +9,8 @@ import rm from "./rm.js";
 import mv from "./mv.js";
 import funcOs from "./os.js";
 import hash from "./hash.js";
+import decompress from "./decompress.js";
+import compress from "./compress.js";
 
 import printCurrentDir from "../utils/printCurrentDir.js";
 
@@ -53,6 +55,14 @@ export default async function navigation() {
 		else if (formattedData.startsWith('hash')) {
 			let path = formattedData.replace('hash', '').trim()
 			await hash(path)
+		}
+		else if (formattedData.startsWith('decompress')) {
+			let paths = formattedData.replace('decompress', '').slice(1)
+			await decompress(paths)
+		}
+		else if (formattedData.startsWith('compress')) {
+			let paths = formattedData.replace('compress', '').slice(1)
+			await compress(paths)
 		}
 		else if (formattedData === '.exit') {
 			process.exit()
