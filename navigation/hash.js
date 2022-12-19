@@ -5,19 +5,18 @@ import fs from "fs/promises";
 import * as crypto from "crypto";
 
 export default async function hash(data) {
-	if (data.length === 0) {
+	if (data.length === 0 || data.length > 1) {
 		process.stdin.write('Invalid input\n')
 		await printCurrentDir(process.cwd())
+		return false
 	}
 
-	let pathToFile = path.resolve(data)
-	console.log(pathToFile)
+	let pathToFile = path.resolve(data[0])
 
 	try {
 		await fs.access(pathToFile)
 		await createHash()
 	} catch (e) {
-		console.log(e)
 		console.log('Operation failed')
 		await printCurrentDir(process.cwd())
 	}

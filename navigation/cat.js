@@ -4,18 +4,18 @@ import { createReadStream } from 'fs'
 import printCurrentDir from "../utils/printCurrentDir.js";
 
 export default async function cat(data) {
-	if (data.length === 0) {
+	if (data.length === 0 || data.length > 1) {
 		process.stdin.write('Invalid input\n')
 		printCurrentDir(process.cwd())
+		return
 	}
 
-	let pathToFile = path.resolve(data)
+	let pathToFile = path.resolve(data[0])
 
 	try {
-		let pathToFile = path.resolve(data)
 		await fs.access(pathToFile)
 		await createStream()
-	} catch {
+	} catch (e) {
 		console.log('Operation failed')
 		printCurrentDir(process.cwd())
 	}

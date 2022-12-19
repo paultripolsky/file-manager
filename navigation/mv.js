@@ -2,26 +2,25 @@ import printCurrentDir from "../utils/printCurrentDir.js";
 import * as path from "path";
 import fs from 'fs/promises'
 import { createReadStream, createWriteStream } from "fs";
-import rm from "./rm.js";
 
 export default async function mv(data) {
 
-	let formattedData = data.split(' ')
 	let pathToFile
 	let pathToDirectory
 
-	if (data.length === 0 || formattedData.length < 2) {
+	if (data.length === 0 || data.length < 2) {
 		process.stdin.write('Invalid input\n')
 		await printCurrentDir(process.cwd())
+		return false
 	} else {
 		try {
-			pathToFile = path.resolve(formattedData[0])
-			pathToDirectory = path.resolve(formattedData[1])
+			pathToFile = path.resolve(data[0])
+			pathToDirectory = path.resolve(data[1])
 
 			await fs.access(pathToFile)
 			await fs.access(pathToDirectory)
 			await createStreams()
-			await rm(pathToFile)
+			await fs.unlink(pathToFile)
 		} catch {
 			console.log('Operation failed')
 			await printCurrentDir(process.cwd())
@@ -46,7 +45,7 @@ export default async function mv(data) {
 		})
 
 		readStream.on('end', () => {
-			console.log('The file was copied successfully')
+			console.log('The file was moved successfully')
 			printCurrentDir(process.cwd())
 		})
 	}

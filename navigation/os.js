@@ -4,10 +4,16 @@ import getRootDir from "../utils/getRootDir.js";
 
 export default async function funcOs(data) {
 
-	if (data === '--EOL') {
+	if (data.length === 0 || data.length > 1) {
+		process.stdin.write('Invalid input\n')
+		await printCurrentDir(process.cwd())
+		return false
+	}
+
+	if (data[0] === '--EOL') {
 		console.log(os.EOL)
 	}
-	else if (data === '--cpus') {
+	else if (data[0] === '--cpus') {
 		let cpusInfo = os.cpus()
 		let table = []
 		cpusInfo.forEach(c => {
@@ -19,15 +25,15 @@ export default async function funcOs(data) {
 		console.table(table)
 		printCurrentDir(process.cwd())
 	}
-	else if (data === '--homedir') {
+	else if (data[0] === '--homedir') {
 		console.log(os.homedir())
 		printCurrentDir(getRootDir())
 	}
-	else if (data === '--username') {
+	else if (data[0] === '--username') {
 		console.log (os.userInfo().username);
 		printCurrentDir(process.cwd())
 	}
-	else if (data === '--architecture') {
+	else if (data[0] === '--architecture') {
 		console.log(os.arch())
 		printCurrentDir(process.cwd())
 	}

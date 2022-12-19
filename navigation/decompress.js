@@ -5,24 +5,22 @@ import {createReadStream, createWriteStream} from "fs";
 import { createBrotliDecompress } from 'zlib'
 
 export default async function decompress(data) {
-	let formattedData = data.split(' ')
 	let pathToFile
 	let pathToDirectory
 
-	if (data.length === 0 || formattedData.length < 2) {
+	if (data.length === 0 || data.length < 2) {
 		process.stdin.write('Invalid input\n')
 		await printCurrentDir(process.cwd())
 	} else {
 		try {
-			pathToFile = path.resolve(formattedData[0])
-			pathToDirectory = path.resolve(formattedData[1])
+			pathToFile = path.resolve(data[0])
+			pathToDirectory = path.resolve(data[1])
 
 			await fs.access(pathToFile)
 			await fs.access(pathToDirectory)
 			await decompressFunction()
-		} catch (e) {
+		} catch {
 			console.log('Operation failed')
-			console.log(e)
 			await printCurrentDir(process.cwd())
 		}
 	}
@@ -35,5 +33,7 @@ export default async function decompress(data) {
 		let brotli = createBrotliDecompress()
 
 		readStream.pipe(brotli).pipe(writeStream)
+		console.log('Decompression was successful')
+		await printCurrentDir(process.cwd())
 	}
 }

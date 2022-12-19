@@ -13,6 +13,7 @@ import decompress from "./decompress.js";
 import compress from "./compress.js";
 
 import printCurrentDir from "../utils/printCurrentDir.js";
+import parseCommandLineArgs from "../utils/parseCommandLineArgs.js";
 
 export default async function navigation() {
 	let rl = readline.createInterface({
@@ -33,35 +34,35 @@ export default async function navigation() {
 			await ls(process.cwd())
 		}
 		else if (formattedData.startsWith('cat')) {
-			let pathToFile = formattedData.replace('cat', '').trim()
-			await cat(pathToFile)
+			let args = await parseCommandLineArgs(formattedData, 'cat')
+			await cat(args)
 		}
 		else if (formattedData.startsWith('cp')) {
-			let paths = formattedData.replace('cp', '').slice(1)
+			let paths = await parseCommandLineArgs(formattedData, 'cp')
 			await cp(paths)
 		}
 		else if (formattedData.startsWith('mv')) {
-			let paths = formattedData.replace('mv', '').slice(1)
+			let paths = await parseCommandLineArgs(formattedData, 'mv')
 			await mv(paths)
 		}
 		else if (formattedData.startsWith('rm')) {
-			let path = formattedData.replace('rm', '').trim()
-			await rm(path)
+			let args = await parseCommandLineArgs(formattedData, 'rm')
+			await rm(args)
 		}
 		else if (formattedData.startsWith('os')) {
-			let command = formattedData.replace('os', '').trim()
-			await funcOs(command)
+			let args = await parseCommandLineArgs(formattedData, 'os')
+			await funcOs(args)
 		}
 		else if (formattedData.startsWith('hash')) {
-			let path = formattedData.replace('hash', '').trim()
-			await hash(path)
+			let args = await parseCommandLineArgs(formattedData, 'hash')
+			await hash(args)
 		}
 		else if (formattedData.startsWith('decompress')) {
-			let paths = formattedData.replace('decompress', '').slice(1)
+			let paths = await parseCommandLineArgs(formattedData, 'decompress')
 			await decompress(paths)
 		}
 		else if (formattedData.startsWith('compress')) {
-			let paths = formattedData.replace('compress', '').slice(1)
+			let paths = await parseCommandLineArgs(formattedData, 'compress')
 			await compress(paths)
 		}
 		else if (formattedData === '.exit') {
